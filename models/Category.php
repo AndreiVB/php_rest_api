@@ -55,6 +55,27 @@
       }
       printf("Error: %s.\n", $stmt->error);
       return false;
+    }
 
+    public function update()
+    {
+      $query = 'UPDATE ' . $this->table . '
+      SET name =:name
+      WHERE id =:id';
+      //prepare query
+      $stmt = $this->conn->prepare($query);
+      //clean data
+      $this->id = htmlspecialchars(strip_tags($this->id));
+      $this->name = htmlspecialchars(strip_tags($this->name));
+      //bind data
+      $stmt->bindParam('id', $this->id);
+      $stmt->bindParam('name', $this->name);
+      //execute query
+      if($stmt->execute()) {
+        return true;
+      }
+      //if not true show error
+      print_r("Error: %s.\n". $stmt->error);
+      return false;
     }
   }

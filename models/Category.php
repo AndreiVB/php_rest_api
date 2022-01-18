@@ -36,4 +36,25 @@
       $this->name = $row['name'];
       $this->id = $row['id'];
     }
+
+    public function create()
+    {
+      $query = 'INSERT INTO ' . $this->table . '
+      SET id = :id, name = :name ';
+      //prepare stmt
+      $stmt = $this->conn->prepare($query);
+      //clean data
+      $this->id = htmlspecialchars(strip_tags($this->id));
+      $this->name = htmlspecialchars(strip_tags($this->name));
+      //bind data
+      $stmt->bindParam(':id', $this->id);
+      $stmt->bindParam(':name', $this->name);
+      //execute query
+      if($stmt->execute()) {
+        return true;
+      }
+      printf("Error: %s.\n", $stmt->error);
+      return false;
+
+    }
   }

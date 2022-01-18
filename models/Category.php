@@ -21,4 +21,19 @@
       $stmt->execute();
       return $stmt;
     }
+
+    public function read_single()
+    {
+      $query = 'SELECT id, name, created_at FROM ' .
+      $this->table . '
+      WHERE id = ?
+      LIMIT 0, 1 ';
+      $stmt = $this->conn->prepare($query);
+      $stmt->bindParam(1, $this->id);
+      $stmt->execute();
+
+      $row = $stmt->fetch(PDO::FETCH_ASSOC);
+      $this->name = $row['name'];
+      $this->id = $row['id'];
+    }
   }
